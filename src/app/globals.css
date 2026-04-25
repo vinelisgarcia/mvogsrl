@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f8fafc;
+  color: #090b0f;
+}
+
+::selection {
+  background: #d6b25e;
+  color: #090b0f;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+}

@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MVOG SRL | Preview Comercial</title>
+    <style>
+      :root {
+        --ink: #090b0f;
+        --navy: #0b1f3a;
+        --gold: #d6b25e;
+        --muted: #64748b;
+        --line: #e2e8f0;
+        --paper: #f8fafc;
+        --white: #fff;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+      a { color: inherit; text-decoration: none; }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 16px clamp(18px, 5vw, 64px);
+        background: rgba(9, 11, 15, 0.92);
+        color: white;
+        backdrop-filter: blur(14px);
+      }
+      .brand { display: flex; align-items: center; gap: 10px; font-weight: 900; }
+      .brand span:first-child {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: var(--gold);
+        color: var(--ink);
+      }
+      nav { display: flex; gap: 22px; color: rgba(255,255,255,.72); font-size: 14px; }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        border: 0;
+        border-radius: 8px;
+        padding: 0 18px;
+        background: var(--gold);
+        color: var(--ink);
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .btn.dark { background: var(--ink); color: white; }
+      .btn.ghost { background: transparent; color: white; border: 1px solid rgba(255,255,255,.32); }
+
+      .hero {
+        position: relative;
+        min-height: 84vh;
+        display: grid;
+        align-items: end;
+        padding: 120px clamp(20px, 5vw, 72px) 64px;
+        color: white;
+        overflow: hidden;
+        background:
+          linear-gradient(90deg, rgba(9,11,15,.96), rgba(9,11,15,.82), rgba(11,31,58,.42)),
+          url("public/assets/mvog-hero.png") center / cover no-repeat,
+          var(--ink);
+      }
+      .hero-content { max-width: 960px; position: relative; }
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--gold);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+      h1, h2, h3, p { margin-top: 0; }
+      h1 {
+        max-width: 980px;
+        margin-bottom: 22px;
+        font-size: clamp(42px, 7vw, 86px);
+        line-height: .96;
+        letter-spacing: 0;
+      }
+      h2 {
+        margin-bottom: 16px;
+        font-size: clamp(30px, 4vw, 54px);
+        line-height: 1;
+      }
+      .hero p:not(.eyebrow) {
+        max-width: 780px;
+        color: rgba(255,255,255,.78);
+        font-size: 20px;
+      }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+
+      section { padding: clamp(64px, 9vw, 110px) clamp(20px, 5vw, 72px); }
+      .wrap { max-width: 1200px; margin: 0 auto; }
+      .section-copy { max-width: 780px; margin-bottom: 34px; color: var(--muted); font-size: 18px; }
+      .grid { display: grid; gap: 18px; }
+      .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .card {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 24px;
+        box-shadow: 0 14px 40px rgba(9, 11, 15, .06);
+      }
+      .card small {
+        display: inline-flex;
+        margin-bottom: 18px;
+        color: var(--navy);
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+      }
+      .card p, li { color: var(--muted); }
+      .dark-band { background: var(--ink); color: white; }
+      .dark-band .section-copy { color: rgba(255,255,255,.68); }
+      .dark-band .card { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); color: white; }
+      .featured { background: white !important; color: var(--ink) !important; border-color: var(--gold) !important; transform: translateY(-10px); }
+      ul { padding-left: 18px; }
+      .comparison { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: white; }
+      table { width: 100%; min-width: 760px; border-collapse: collapse; }
+      th { background: var(--ink); color: white; }
+      th, td { padding: 16px; border-bottom: 1px solid var(--line); text-align: left; }
+      td:first-child { font-weight: 900; color: var(--ink); }
+      td:last-child { color: var(--navy); font-weight: 900; }
+
+      form {
+        display: grid;
+        gap: 28px;
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: clamp(22px, 4vw, 34px);
+        box-shadow: 0 24px 80px rgba(9, 11, 15, .14);
+      }
+      fieldset { border: 0; padding: 0; margin: 0; }
+      legend { margin-bottom: 14px; font-size: 20px; font-weight: 900; }
+      .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      label { display: grid; gap: 8px; font-size: 14px; font-weight: 800; color: #1f2937; }
+      input, select, textarea {
+        width: 100%;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 12px;
+        font: inherit;
+      }
+      textarea { resize: vertical; min-height: 92px; }
+      .checks { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+      .check { display: flex; align-items: flex-start; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; }
+      .check input { width: auto; margin-top: 4px; }
+      .notice {
+        display: none;
+        border-radius: 8px;
+        padding: 18px;
+        background: #ecfdf5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+        font-weight: 700;
+      }
+      .notice.show { display: block; }
+      footer { padding: 32px clamp(20px, 5vw, 72px); background: white; border-top: 1px solid var(--line); color: var(--muted); }
+
+      @media (max-width: 900px) {
+        nav { display: none; }
+        .grid-3, .grid-4, .form-grid, .checks { grid-template-columns: 1fr; }
+        .featured { transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="#inicio"><span>M</span><span>MVOG SRL</span></a>
+      <nav>
+        <a href="#oferta">Oferta</a>
+        <a href="#comparativa">Comparativa</a>
+        <a href="#plantillas">Nichos</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#briefing">Briefing</a>
+      </nav>
+      <a class="btn" href="#briefing">Solicitar diagnóstico</a>
+    </header>
+
+    <main id="inicio">
+      <section class="hero">
+        <div class="hero-content">
+          <p class="eyebrow">MVOG SRL | Sistemas comerciales automatizados</p>
+          <h1>Convierte tus leads en ventas reales con un sistema comercial automatizado</h1>
+          <p>MVOG diseña páginas web, formularios inteligentes y flujos automatizados para captar, calificar y convertir clientes sin depender de procesos manuales.</p>
+          <div class="hero-actions">
+            <a class="btn" href="#briefing">Solicitar diagnóstico</a>
+            <a class="btn ghost" href="#pricing">Ver paquetes</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="oferta">
+        <div class="wrap">
+          <p class="eyebrow">Oferta principal</p>
+          <h2>Sistema Comercial Automatizado MVOG</h2>
+          <p class="section-copy">Un sistema para captar, ordenar y convertir oportunidades comerciales con datos estructurados y seguimiento claro.</p>
+          <div class="grid grid-4">
+            <article class="card"><small>01</small><h3>Landing comercial</h3><p>Página orientada a conversión con mensaje, oferta, prueba y llamada a la acción.</p></article>
+            <article class="card"><small>02</small><h3>Briefing inteligente</h3><p>Formulario amplio para entender negocio, dolor, presupuesto, urgencia y objetivos.</p></article>
+            <article class="card"><small>03</small><h3>Ficha del cliente</h3><p>Documento estructurado para análisis interno y preparación de propuesta comercial.</p></article>
+            <article class="card"><small>04</small><h3>Dashboard de leads</h3><p>Vista básica para ordenar oportunidades por estado, presupuesto, sector y urgencia.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="comparativa" style="background:white">
+        <div class="wrap">
+          <p class="eyebrow">Comparativa</p>
+          <h2>MVOG vs DIY vs Agencia tradicional</h2>
+          <div class="comparison">
+            <table>
+              <thead><tr><th>Factor</th><th>DIY</th><th>Agencia tradicional</th><th>MVOG</th></tr></thead>
+              <tbody>
+                <tr><td>Tiempo de implementación</td><td>Lento y disperso</td><td>Semanas de discovery</td><td>Ruta MVP clara</td></tr>
+                <tr><td>Enfoque en ventas</td><td>Depende del cliente</td><td>Diseño primero</td><td>Conversión primero</td></tr>
+                <tr><td>Automatización</td><td>Manual</td><td>Extra costoso</td><td>Incluida por paquete</td></tr>
+                <tr><td>Control de datos</td><td>Disperso</td><td>Depende del stack</td><td>Datos estructurados</td></tr>
+                <tr><td>Seguimiento de leads</td><td>Sin proceso</td><td>No siempre incluido</td><td>Estados y dashboard</td></tr>
+                <tr><td>Cumplimiento/KYC/PLAFT</td><td>No contemplado</td><td>Proyecto aparte</td><td>Preparado si aplica</td></tr>
+                <tr><td>Escalabilidad</td><td>Frágil</td><td>A medida</td><td>Sistema replicable</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="plantillas">
+        <div class="wrap">
+          <p class="eyebrow">Plantillas por nicho</p>
+          <h2>Estructuras comerciales listas para adaptar</h2>
+          <div class="grid grid-3">
+            <article class="card"><h3>Inmobiliarias y promotoras</h3><p>Captura compradores, inversores y propietarios con fichas claras y seguimiento por proyecto.</p></article>
+            <article class="card"><h3>Servicios profesionales</h3><p>Convierte autoridad en consultas calificadas con páginas de oferta, casos y diagnóstico inicial.</p></article>
+            <article class="card"><h3>Logística y distribución</h3><p>Ordena solicitudes B2B, rutas, volumen, frecuencia y necesidades operativas antes de cotizar.</p></article>
+            <article class="card"><h3>Hoteles/proveedores B2B</h3><p>Centraliza solicitudes comerciales, alianzas, eventos, abastecimiento y oportunidades corporativas.</p></article>
+            <article class="card"><h3>E-commerce</h3><p>Mejora conversión, recupera leads y organiza oportunidades de compra mayorista o recurrente.</p></article>
+            <article class="card"><h3>Consultores/agentes independientes</h3><p>Estandariza captación, diagnóstico, propuesta y seguimiento sin depender de mensajes manuales.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" class="dark-band">
+        <div class="wrap">
+          <p class="eyebrow">Pricing por paquete</p>
+          <h2>Paquetes claros para avanzar sin fricción</h2>
+          <p class="section-copy">Desde validación comercial hasta flujos completos con documentos, dashboard y seguimiento.</p>
+          <div class="grid grid-3">
+            <article class="card">
+              <small>Starter</small><h3>Desde USD 150</h3>
+              <ul><li>Landing comercial</li><li>Formulario básico</li><li>Captura de leads</li><li>Documento resumen del lead</li></ul>
+            </article>
+            <article class="card featured">
+              <small>Growth</small><h3>Desde USD 1,200</h3>
+              <ul><li>Todo Starter</li><li>Formulario avanzado</li><li>Lead scoring</li><li>Dashboard básico</li><li>Automatización email/WhatsApp</li></ul>
+            </article>
+            <article class="card">
+              <small>Pro</small><h3>Desde USD 3,000</h3>
+              <ul><li>Todo Growth</li><li>Flujo comercial completo</li><li>Documentos automatizados</li><li>Cumplimiento/KYC si aplica</li><li>Reportes y propuesta automatizada</li></ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="briefing">
+        <div class="wrap">
+          <p class="eyebrow">Formulario de briefing</p>
+          <h2>Completa tu diagnóstico inicial</h2>
+          <p class="section-copy">Este preview no guarda en Supabase. Genera una ficha HTML descargable en tu navegador para probar el flujo rápidamente.</p>
+
+          <form id="leadForm">
+            <fieldset>
+              <legend>Datos del lead</legend>
+              <div class="form-grid">
+                <label>Nombre completo<input name="fullName" required></label>
+                <label>Empresa<input name="company" required></label>
+                <label>Cargo<input name="role"></label>
+                <label>Email<input type="email" name="email" required></label>
+                <label>WhatsApp<input name="whatsapp" required></label>
+                <label>País<input name="country" required></label>
+                <label>Ciudad<input name="city" required></label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Información del negocio</legend>
+              <div class="form-grid">
+                <label>Sector o industria<input name="industry" required></label>
+                <label>Tipo de cliente ideal<input name="idealClient" required></label>
+                <label>Ticket promedio<input name="averageTicket"></label>
+                <label>Página web actual<input name="currentWebsite"></label>
+                <label>Redes sociales<input name="socialNetworks"></label>
+                <label>Servicios/productos principales<textarea name="mainProducts" required></textarea></label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Situación actual</legend>
+              <div class="form-grid">
+                <label>Cómo capta leads actualmente<textarea name="currentLeadCapture" required></textarea></label>
+                <label>Cuántos leads recibe al mes<input name="monthlyLeads"></label>
+                <label>Cómo da seguimiento<textarea name="followUpProcess" required></textarea></label>
+                <label>Usa CRM<select name="usesCrm" required><option value="">Selecciona</option><option>Sí</option><option>No</option></select></label>
+                <label>Principal problema comercial<textarea name="commercialProblem" required></textarea></label>
+                <label>Dónde siente que pierde ventas<textarea name="lostSalesPoint" required></textarea></label>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Objetivos</legend>
+              <div class="checks">
+                <label class="check"><input type="checkbox" name="objectives" value="Quiere más leads"> Quiere más leads</label>
+                <label class="check"><input type="checkbox" name="objectives" value="Quiere más cierres"> Quiere más cierres</label>
+                <label class="check"><input type="checkbox" name="objectives" value="Quiere automatizar seguimiento"> Quiere automatizar seguimiento</label>
+                <label class="check"><input type="checkbox" name="objectives" value="Quiere mejorar imagen comercial"> Quiere mejorar imagen comercial</label>
+                <label class="check"><input type="checkbox" name="objectives" value="Quiere organizar su equipo de ventas"> Quiere organizar su equipo de ventas</label>
+                <label class="check"><input type="checkbox" name="objectives" value="Quiere cumplimiento/KYC"> Quiere cumplimiento/KYC</label>
+              </div>
+              <br>
+              <label>Otro objetivo<input name="otherObjective"></label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Presupuesto y urgencia</legend>
+              <div class="form-grid">
+                <label>Presupuesto
+                  <select name="budget" required>
+                    <option value="">Selecciona</option>
+                    <option value="Menos de USD 150">Menos de USD 150</option>
+                    <option value="USD 150–1,200">USD 150–1,200</option>
+                    <option value="USD 1,200–3,000">USD 1,200–3,000</option>
+                    <option value="Más de USD 3,000">Más de USD 3,000</option>
+                  </select>
+                </label>
+                <label>Urgencia
+                  <select name="urgency" required>
+                    <option value="">Selecciona</option>
+                    <option>Inmediato</option>
+                    <option>Este mes</option>
+                    <option>Próximos 3 meses</option>
+                    <option>Solo estoy evaluando</option>
+                  </select>
+                </label>
+              </div>
+            </fieldset>
+
+            <label class="check">
+              <input type="checkbox" name="consent" required>
+              Acepto que MVOG utilice esta información para analizar mi necesidad y preparar una propuesta comercial.
+            </label>
+
+            <div class="notice" id="notice"></div>
+            <button class="btn dark" type="submit">Generar ficha descargable</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <strong>MVOG SRL</strong>
+      <p>Preview HTML para probar rápidamente el flujo comercial sin backend.</p>
+    </footer>
+
+    <script>
+      const form = document.querySelector("#leadForm");
+      const notice = document.querySelector("#notice");
+
+      function packageByBudget(budget) {
+        if (budget === "Menos de USD 150") return "Lead no calificado / seguimiento educativo";
+        if (budget === "USD 150–1,200") return "Starter";
+        if (budget === "USD 1,200–3,000") return "Growth";
+        if (budget === "Más de USD 3,000") return "Pro";
+        return "Pendiente de calificación";
+      }
+
+      function htmlEscape(value) {
+        return String(value || "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function row(label, value) {
+        return `<tr><th>${htmlEscape(label)}</th><td>${htmlEscape(value || "No indicado")}</td></tr>`;
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const data = new FormData(form);
+        const objectives = data.getAll("objectives").join(", ") || "No indicados";
+        const budget = data.get("budget");
+        const recommended = packageByBudget(budget);
+
+        const doc = `<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Ficha Comercial del Lead - MVOG</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:40px;color:#111827;line-height:1.5}
+    h1,h2{color:#0b1f3a}
+    h2{border-bottom:1px solid #ddd;padding-bottom:6px;margin-top:28px}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid #e5e7eb;padding:10px;text-align:left;vertical-align:top}
+    th{width:30%;background:#f3f4f6}
+    .badge{display:inline-block;background:#d6b25e;padding:8px 12px;border-radius:999px;font-weight:bold}
+    .note{background:#f8fafc;border-left:4px solid #d6b25e;padding:14px}
+  </style>
+</head>
+<body>
+  <h1>Ficha Comercial del Lead – MVOG</h1>
+  <p class="badge">${htmlEscape(recommended)}</p>
+  <h2>Datos generales</h2>
+  <table>
+    ${row("Nombre completo", data.get("fullName"))}
+    ${row("Empresa", data.get("company"))}
+    ${row("Cargo", data.get("role"))}
+    ${row("Email", data.get("email"))}
+    ${row("WhatsApp", data.get("whatsapp"))}
+    ${row("País", data.get("country"))}
+    ${row("Ciudad", data.get("city"))}
+  </table>
+  <h2>Información del negocio</h2>
+  <table>
+    ${row("Sector o industria", data.get("industry"))}
+    ${row("Tipo de cliente ideal", data.get("idealClient"))}
+    ${row("Ticket promedio", data.get("averageTicket"))}
+    ${row("Servicios/productos principales", data.get("mainProducts"))}
+    ${row("Página web actual", data.get("currentWebsite"))}
+    ${row("Redes sociales", data.get("socialNetworks"))}
+  </table>
+  <h2>Diagnóstico inicial</h2>
+  <table>
+    ${row("Cómo capta leads actualmente", data.get("currentLeadCapture"))}
+    ${row("Leads al mes", data.get("monthlyLeads"))}
+    ${row("Cómo da seguimiento", data.get("followUpProcess"))}
+    ${row("Usa CRM", data.get("usesCrm"))}
+    ${row("Principal problema comercial", data.get("commercialProblem"))}
+    ${row("Dónde pierde ventas", data.get("lostSalesPoint"))}
+  </table>
+  <h2>Necesidad principal detectada</h2>
+  <p>${htmlEscape(objectives)}${data.get("otherObjective") ? ", " + htmlEscape(data.get("otherObjective")) : ""}</p>
+  <h2>Nivel de urgencia</h2>
+  <p>${htmlEscape(data.get("urgency"))}</p>
+  <h2>Presupuesto estimado</h2>
+  <p>${htmlEscape(budget)}</p>
+  <h2>Paquete recomendado</h2>
+  <p>${htmlEscape(recommended)}</p>
+  <h2>Próximo paso sugerido</h2>
+  <p>${recommended === "Lead no calificado / seguimiento educativo" ? "Enviar contenido educativo y hacer seguimiento." : "Agendar diagnóstico y preparar propuesta comercial."}</p>
+  <h2>Notas internas MVOG</h2>
+  <div class="note">Validar decisión maker, urgencia real, fuente del lead, restricciones de cumplimiento/KYC/PLAFT y próxima acción.</div>
+</body>
+</html>`;
+
+        const blob = new Blob([doc], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `ficha-mvog-${Date.now()}.html`;
+        link.click();
+        URL.revokeObjectURL(url);
+
+        notice.classList.add("show");
+        notice.innerHTML = `Gracias. Hemos recibido tu información. Paquete recomendado: <strong>${htmlEscape(recommended)}</strong>. La ficha HTML fue descargada.`;
+      });
+    </script>
+  </body>
+</html>
