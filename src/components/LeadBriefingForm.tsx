@@ -95,71 +95,110 @@ export function LeadBriefingForm() {
   }
 
   const inputClass =
-    "mt-2 w-full rounded-lg border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-slate-950 focus:ring-4 focus:ring-slate-200";
+    "mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-200/70";
   const labelClass = "text-sm font-bold text-slate-800";
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr]">
-      <aside className="rounded-lg border border-slate-200 bg-slate-950 p-7 text-white lg:p-8">
-        <p className="text-xs font-black uppercase tracking-[0.14em] text-slate-300">
-          Solicitud
+    <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="rounded-[2rem] bg-slate-950 p-8 text-white shadow-2xl shadow-slate-950/20 lg:p-10">
+        <p className="text-sm font-black uppercase tracking-[0.18em] text-cyan-300">
+          Demo/propuesta gratis
         </p>
-        <h2 className="mt-3 text-3xl font-black tracking-tight md:text-4xl">
+        <h2 className="mt-4 text-3xl font-black tracking-tight md:text-5xl">
           Solicita tu demo/propuesta gratis
         </h2>
-        <p className="mt-4 text-base text-slate-300">
-          Dinos que hace tu empresa. Te devolvemos una propuesta visual y decides
-          despues de verla.
+        <p className="mt-5 text-lg text-white/72">
+          Dinos que hace tu empresa. Te devolvemos una propuesta visual. Ves la
+          idea antes de pagar.
         </p>
-        <dl className="mt-7 grid gap-4 border-t border-white/10 pt-6 text-sm">
-          <div>
-            <dt className="font-black text-white">Precio de entrada</dt>
-            <dd className="mt-1 text-slate-300">Webs simples desde USD 100.</dd>
+        <div className="mt-8 grid gap-3 text-sm font-semibold text-white/82">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            Webs simples desde <strong className="text-cyan-300">USD 100</strong>.
           </div>
-          <div>
-            <dt className="font-black text-white">Riesgo inicial</dt>
-            <dd className="mt-1 text-slate-300">Si no te gusta la propuesta, no pagas.</dd>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            Si te gusta, pagas y publicamos. Si no, no pagas.
           </div>
-          <div>
-            <dt className="font-black text-white">Alcance</dt>
-            <dd className="mt-1 text-slate-300">Webs, webapps y sistemas internos segun necesidad.</dd>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            Si necesitas algo mas que una web, tambien hacemos webapps y sistemas internos.
           </div>
-        </dl>
-      </aside>
+        </div>
+      </div>
 
-      <form onSubmit={submitForm} className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+      <form
+        onSubmit={submitForm}
+        className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-950/10 md:p-8"
+      >
         <div className="grid gap-4 md:grid-cols-2">
           <label className={labelClass}>
             Nombre de empresa
-            <input className={inputClass} value={form.company} onChange={(event) => updateField("company", event.target.value)} required />
+            <input
+              className={inputClass}
+              value={form.company}
+              onChange={(event) => updateField("company", event.target.value)}
+              required
+            />
           </label>
           <label className={labelClass}>
             Persona de contacto
-            <input className={inputClass} value={form.contact} onChange={(event) => updateField("contact", event.target.value)} />
+            <input
+              className={inputClass}
+              value={form.contact}
+              onChange={(event) => updateField("contact", event.target.value)}
+            />
           </label>
           <label className={labelClass}>
             Email
-            <input className={inputClass} type="email" value={form.email} onChange={(event) => updateField("email", event.target.value)} required />
+            <input
+              className={inputClass}
+              type="email"
+              value={form.email}
+              onChange={(event) => updateField("email", event.target.value)}
+              required
+            />
           </label>
           <label className={labelClass}>
             WhatsApp opcional
-            <input className={inputClass} value={form.whatsapp} onChange={(event) => updateField("whatsapp", event.target.value)} placeholder="+1 809..." />
+            <input
+              className={inputClass}
+              value={form.whatsapp}
+              onChange={(event) => updateField("whatsapp", event.target.value)}
+              placeholder="+1 809..."
+            />
           </label>
           <label className={labelClass}>
             Pais
-            <input className={inputClass} value={form.country} onChange={(event) => updateField("country", event.target.value)} />
+            <input
+              className={inputClass}
+              value={form.country}
+              onChange={(event) => updateField("country", event.target.value)}
+            />
           </label>
           <label className={labelClass}>
             Sector/nicho
-            <input className={inputClass} value={form.sector} onChange={(event) => updateField("sector", event.target.value)} required />
+            <input
+              className={inputClass}
+              value={form.sector}
+              onChange={(event) => updateField("sector", event.target.value)}
+              required
+            />
           </label>
           <label className={`${labelClass} md:col-span-2`}>
             Web actual, si tiene
-            <input className={inputClass} value={form.website} onChange={(event) => updateField("website", event.target.value)} placeholder="https://..." />
+            <input
+              className={inputClass}
+              value={form.website}
+              onChange={(event) => updateField("website", event.target.value)}
+              placeholder="https://..."
+            />
           </label>
           <label className={`${labelClass} md:col-span-2`}>
             Que necesitas
-            <select className={inputClass} value={form.service} onChange={(event) => updateField("service", event.target.value)} required>
+            <select
+              className={inputClass}
+              value={form.service}
+              onChange={(event) => updateField("service", event.target.value)}
+              required
+            >
               <option value="">Selecciona una opcion</option>
               {serviceOptions.map((option) => (
                 <option key={option}>{option}</option>
@@ -174,16 +213,16 @@ export function LeadBriefingForm() {
               minLength={20}
               value={form.description}
               onChange={(event) => updateField("description", event.target.value)}
-              placeholder="Ej. Somos una clinica dental y queremos una landing para recibir solicitudes por WhatsApp."
+              placeholder="Ej. Somos una clinica dental y queremos una landing para recibir solicitudes por WhatsApp..."
               required
             />
           </label>
         </div>
 
-        <label className="mt-5 flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm font-semibold text-slate-800">
+        <label className="mt-5 flex items-start gap-3 rounded-2xl bg-slate-50 p-4 text-sm font-semibold text-slate-800">
           <input
             type="checkbox"
-            className="mt-1 h-4 w-4 accent-slate-950"
+            className="mt-1 h-4 w-4 accent-cyan-500"
             checked={form.consent}
             onChange={(event) => updateField("consent", event.target.checked)}
             required
@@ -192,22 +231,23 @@ export function LeadBriefingForm() {
         </label>
 
         {error ? (
-          <p className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
+          <p className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
             {error}
           </p>
         ) : null}
 
         {submitted ? (
-          <div className="mt-5 rounded-lg border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900">
+          <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900">
             <h3 className="font-black">Solicitud recibida.</h3>
             <p className="mt-2">
-              Revisaremos tu empresa y prepararemos una propuesta inicial. Tambien puedes enviarnos el resumen por tu canal preferido:
+              Revisaremos tu empresa y prepararemos una propuesta inicial. Para
+              enviarla ahora mismo por tu canal preferido, usa uno de estos accesos:
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
-              <a className="rounded-lg bg-slate-950 px-4 py-2 font-black text-white" href={mailtoHref}>
+              <a className="rounded-full bg-slate-950 px-4 py-2 font-black text-white" href={mailtoHref}>
                 Enviar por email
               </a>
-              <a className="rounded-lg border border-emerald-300 bg-white px-4 py-2 font-black text-emerald-900" href={whatsappHref} target="_blank">
+              <a className="rounded-full border border-emerald-300 bg-white px-4 py-2 font-black text-emerald-900" href={whatsappHref} target="_blank">
                 Enviar por WhatsApp
               </a>
             </div>
@@ -216,7 +256,7 @@ export function LeadBriefingForm() {
 
         <button
           type="submit"
-          className="mt-6 w-full rounded-lg bg-slate-950 px-6 py-4 text-base font-black text-white transition hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-200"
+          className="mt-6 w-full rounded-full bg-slate-950 px-6 py-4 text-base font-black text-white transition hover:-translate-y-0.5 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-200"
         >
           Enviar solicitud
         </button>
