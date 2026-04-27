@@ -1,7 +1,7 @@
 "use client";
 
 import type { FormEvent } from "react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 type DemoForm = {
   company: string;
@@ -40,34 +40,12 @@ function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-function buildSummary(form: DemoForm) {
-  return [
-    "Nueva solicitud de demo MVOG SRL",
-    "",
-    `Empresa: ${form.company}`,
-    `Contacto: ${form.contact || "No indicado"}`,
-    `Email: ${form.email}`,
-    `WhatsApp: ${form.whatsapp || "No indicado"}`,
-    `Pais: ${form.country || "No indicado"}`,
-    `Sector: ${form.sector}`,
-    `Web actual: ${form.website || "No tiene / no indicada"}`,
-    `Necesita: ${form.service}`,
-    "",
-    "Descripcion:",
-    form.description,
-  ].join("\n");
-}
-
 export function LeadBriefingForm() {
   const [form, setForm] = useState(initialForm);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
-
-  const summary = useMemo(() => buildSummary(form), [form]);
-  const mailtoHref = `mailto:info@mvogsrl.com?subject=${encodeURIComponent(
-    `Solicitud de demo - ${form.company || "MVOG"}`,
-  )}&body=${encodeURIComponent(summary)}`;
-  const whatsappHref = `https://wa.me/?text=${encodeURIComponent(summary)}`;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [emailWarning, setEmailWarning] = useState("");
 
   function updateField<K extends keyof DemoForm>(key: K, value: DemoForm[K]) {
     setForm((current) => ({ ...current, [key]: value }));
@@ -85,13 +63,52 @@ export function LeadBriefingForm() {
     return "";
   }
 
-  function submitForm(event: FormEvent<HTMLFormElement>) {
+  async function submitForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const validationError = validate();
     setError(validationError);
+    setEmailWarning("");
 
     if (validationError) return;
-    setSubmitted(true);
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const result = (await response.json()) as {
+        error?: string;
+        emailSent?: boolean;
+        emailWarning?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(result.error || "No pudimos enviar la solicitud.");
+      }
+
+      if (!result.emailSent && result.emailWarning) {
+        setEmailWarning(
+          "La solicitud quedo validada, pero falta configurar el envio automatico de email en el servidor.",
+        );
+      }
+
+      setSubmitted(true);
+      setForm(initialForm);
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "No pudimos enviar la solicitud. Intentalo nuevamente.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const inputClass =
@@ -240,25 +257,19 @@ export function LeadBriefingForm() {
           <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900">
             <h3 className="font-black">Solicitud recibida.</h3>
             <p className="mt-2">
-              Revisaremos tu empresa y prepararemos una propuesta inicial. Para
-              enviarla ahora mismo por tu canal preferido, usa uno de estos accesos:
+              Revisaremos tu empresa y prepararemos una propuesta inicial. La
+              informacion fue enviada al equipo MVOG.
             </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <a className="rounded-full bg-slate-950 px-4 py-2 font-black text-white" href={mailtoHref}>
-                Enviar por email
-              </a>
-              <a className="rounded-full border border-emerald-300 bg-white px-4 py-2 font-black text-emerald-900" href={whatsappHref} target="_blank">
-                Enviar por WhatsApp
-              </a>
-            </div>
+            {emailWarning ? <p className="mt-2 font-bold">{emailWarning}</p> : null}
           </div>
         ) : null}
 
         <button
           type="submit"
+          disabled={isSubmitting}
           className="mt-6 w-full rounded-full bg-slate-950 px-6 py-4 text-base font-black text-white transition hover:-translate-y-0.5 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-200"
         >
-          Enviar solicitud
+          {isSubmitting ? "Enviando solicitud..." : "Enviar solicitud"}
         </button>
       </form>
     </div>

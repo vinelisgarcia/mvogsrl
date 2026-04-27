@@ -49,6 +49,73 @@ export function normalizeLeadPayload(input: unknown): LeadPayload {
   };
 }
 
+export function normalizeDemoLeadPayload(input: unknown): LeadPayload {
+  const data = input as {
+    company?: unknown;
+    contact?: unknown;
+    email?: unknown;
+    whatsapp?: unknown;
+    country?: unknown;
+    sector?: unknown;
+    website?: unknown;
+    service?: unknown;
+    description?: unknown;
+    consent?: unknown;
+  };
+
+  const service = String(data.service || "").trim();
+  const description = String(data.description || "").trim();
+
+  return {
+    fullName: String(data.contact || "").trim(),
+    company: String(data.company || "").trim(),
+    role: "",
+    email: String(data.email || "").trim(),
+    whatsapp: String(data.whatsapp || "").trim(),
+    country: String(data.country || "").trim(),
+    city: "No indicado",
+    industry: String(data.sector || "").trim(),
+    idealClient: description,
+    averageTicket: "",
+    mainProducts: service,
+    currentWebsite: String(data.website || "").trim(),
+    socialNetworks: "",
+    currentLeadCapture: "Formulario web MVOG",
+    monthlyLeads: "",
+    followUpProcess: "Pendiente de diagnostico MVOG",
+    usesCrm: "no",
+    commercialProblem: description,
+    lostSalesPoint: "Pendiente de diagnostico MVOG",
+    objectives: [service].filter(Boolean),
+    otherObjective: "",
+    budget: service.includes("USD 100")
+      ? "150_1200"
+      : service.includes("USD 200")
+        ? "150_1200"
+        : service.toLowerCase().includes("webapp")
+          ? "1200_3000"
+          : "150_1200",
+    urgency: "evaluating",
+    consent: Boolean(data.consent),
+  };
+}
+
+export function validateDemoLeadPayload(payload: LeadPayload) {
+  const missing: Array<keyof LeadPayload | "description"> = [];
+
+  if (!payload.company) missing.push("company");
+  if (!payload.email || !payload.email.includes("@")) missing.push("email");
+  if (!payload.industry) missing.push("industry");
+  if (!payload.mainProducts) missing.push("mainProducts");
+  if (payload.commercialProblem.trim().length < 20) missing.push("description");
+  if (!payload.consent) missing.push("consent");
+
+  return {
+    ok: missing.length === 0,
+    missing: Array.from(new Set(missing)),
+  };
+}
+
 export function validateLeadPayload(payload: LeadPayload) {
   const missing = requiredTextFields.filter((field) => !payload[field]);
 

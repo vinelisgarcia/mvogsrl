@@ -14,8 +14,11 @@ function row(label: string, value: string) {
   return `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(value || "No indicado")}</td></tr>`;
 }
 
-export function generateLeadDocumentHtml(lead: LeadPayload) {
-  const recommendation = recommendPackage(lead.budget);
+export function generateLeadDocumentHtml(
+  lead: LeadPayload,
+  packageOverride?: { packageName: string; nextStep: string },
+) {
+  const recommendation = packageOverride || recommendPackage(lead.budget);
   const budget = lead.budget ? budgetLabels[lead.budget] : "No indicado";
   const urgency = lead.urgency ? urgencyLabels[lead.urgency] : "No indicada";
   const objectives = lead.objectives.length
