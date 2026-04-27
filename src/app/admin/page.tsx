@@ -1,4 +1,5 @@
 import { AdminLeadsTable } from "@/components/AdminLeadsTable";
+import Link from "next/link";
 
 export default function AdminPage() {
   return (
@@ -6,9 +7,9 @@ export default function AdminPage() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <a href="/" className="text-sm font-bold text-navy underline">
+            <Link href="/" className="text-sm font-bold text-navy underline">
               Volver a la landing
-            </a>
+            </Link>
             <h1 className="mt-4 text-4xl font-black tracking-tight text-ink md:text-6xl">
               Dashboard MVOG
             </h1>

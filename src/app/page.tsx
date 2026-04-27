@@ -1,225 +1,300 @@
-import Image from "next/image";
 import { LeadBriefingForm } from "@/components/LeadBriefingForm";
-import { SectionHeading } from "@/components/SectionHeading";
 import { SiteHeader } from "@/components/SiteHeader";
 
-const offerItems = [
-  "Pagina web/landing comercial",
-  "Formulario de briefing inteligente",
-  "Captura y organizacion de leads",
-  "Generacion de ficha del cliente",
-  "Automatizacion de seguimiento",
-  "Dashboard basico de leads",
-  "Propuesta comercial basada en la informacion recopilada",
-  "Cumplimiento/KYC/PLAFT cuando aplique",
+const services = [
+  ["Landing pages de venta", "Una pagina clara para presentar una oferta y captar contactos."],
+  ["Webs corporativas", "Presencia profesional con secciones para servicios, equipo y contacto."],
+  ["Blogs y contenido", "Estructura para publicar articulos, novedades o recursos de tu empresa."],
+  ["Formularios de captacion", "Solicitudes ordenadas con los datos que realmente necesitas."],
+  ["Webapps internas", "Herramientas privadas para operar mejor sin depender de hojas sueltas."],
+  ["Dashboards", "Paneles para ver clientes, solicitudes, reservas, pedidos o indicadores."],
+  ["Automatizaciones basicas", "Flujos simples para ahorrar pasos manuales en tu operacion."],
+  ["CRM o panel simple", "Una vista a medida para organizar leads, clientes y seguimiento."],
 ];
 
-const comparisonRows = [
-  ["Tiempo de implementacion", "Variable y lento", "Semanas de discovery", "Ruta MVP clara"],
-  ["Enfoque en ventas", "Depende del cliente", "Diseño primero", "Conversion primero"],
-  ["Automatizacion", "Manual", "Extra costoso", "Incluida por paquete"],
-  ["Control de datos", "Disperso", "Depende del stack", "Supabase y ficha estructurada"],
-  ["Seguimiento de leads", "Sin proceso", "No siempre incluido", "Estados y dashboard"],
-  ["Cumplimiento/KYC/PLAFT", "No contemplado", "Proyecto aparte", "Preparado si aplica"],
-  ["Escalabilidad", "Fragil", "A medida", "Sistema replicable"],
-];
-
-const nicheCards = [
+const pricing = [
   {
-    title: "Inmobiliarias y promotoras",
-    body: "Captura compradores, inversores y propietarios con fichas claras, scoring y seguimiento por proyecto.",
-  },
-  {
-    title: "Servicios profesionales",
-    body: "Convierte autoridad en consultas calificadas con paginas de oferta, casos y diagnostico inicial.",
-  },
-  {
-    title: "Logistica y distribucion",
-    body: "Ordena solicitudes B2B, rutas, volumen, frecuencia y necesidades operativas antes de cotizar.",
-  },
-  {
-    title: "Hoteles/proveedores B2B",
-    body: "Centraliza solicitudes comerciales, alianzas, eventos, abastecimiento y oportunidades corporativas.",
-  },
-  {
-    title: "E-commerce",
-    body: "Mejora conversion, recupera leads y organiza oportunidades de compra mayorista o recurrente.",
-  },
-  {
-    title: "Consultores/agentes independientes",
-    body: "Estandariza captacion, diagnostico, propuesta y seguimiento sin depender de mensajes manuales.",
-  },
-];
-
-const packages = [
-  {
-    name: "Starter",
-    price: "Desde USD 150",
+    name: "Landing Simple",
+    price: "USD 100",
+    badge: "Mas rapida para empezar",
+    body: "Para empresas que necesitan una pagina profesional rapida para presentar su negocio, captar leads o validar una oferta.",
     features: [
-      "Landing comercial",
+      "Pagina tipo landing",
+      "Diseno moderno responsive",
+      "Seccion de servicios/oferta",
+      "CTA de contacto",
       "Formulario basico",
-      "Captura de leads",
-      "Documento resumen del lead",
+      "Demo/propuesta inicial gratis",
+      "Solo pagas si te gusta",
     ],
   },
   {
-    name: "Growth",
-    price: "Desde USD 1,200",
+    name: "Web Completa",
+    price: "USD 200",
+    badge: "Mejor para empresas en crecimiento",
     featured: true,
+    body: "Para empresas que necesitan una web mas completa, con estructura clara y espacio para crecer.",
     features: [
-      "Todo Starter",
-      "Formulario avanzado",
-      "Lead scoring",
-      "Dashboard basico",
-      "Automatizacion email/WhatsApp",
+      "Varias secciones o paginas",
+      "Menus",
+      "Pagina de servicios",
+      "Pagina sobre nosotros",
+      "Contacto",
+      "Posibilidad de blog/posts",
+      "Mejor estructura SEO inicial",
+      "Demo/propuesta inicial gratis",
     ],
   },
   {
-    name: "Pro",
-    price: "Desde USD 3,000",
+    name: "Webapp / Sistema",
+    price: "USD 500-1,000+",
+    badge: "Para procesos mas complejos",
+    body: "Para empresas que necesitan paneles, formularios inteligentes, dashboards o sistemas internos.",
     features: [
-      "Todo Growth",
-      "Flujo comercial completo",
-      "Documentos automatizados",
-      "Cumplimiento/KYC si aplica",
-      "Reportes y propuesta automatizada",
+      "Panel interno",
+      "Gestion de clientes",
+      "Automatizacion de procesos",
+      "Dashboards",
+      "Reservas, pedidos o solicitudes",
+      "Inventario simple o CRM basico",
+      "Precio segun complejidad",
     ],
   },
 ];
+
+const steps = [
+  ["Rellenas el formulario", "Nos dices que hace tu empresa y que necesitas."],
+  ["Analizamos tu empresa", "Revisamos sector, objetivo, web actual y alcance probable."],
+  ["Te enviamos una propuesta/demo", "Ves una idea visual antes de comprometerte."],
+  ["Si te gusta, pagas y publicamos", "Sin riesgo inicial para webs simples."],
+];
+
+const sectors = [
+  "Inmobiliarias",
+  "Restaurantes",
+  "Hoteles",
+  "Consultores",
+  "Clinicas",
+  "Tiendas",
+  "Logistica",
+  "Servicios profesionales",
+  "Educacion",
+  "Construccion",
+  "E-commerce",
+  "Empresas B2B",
+];
+
+const examples = [
+  ["Landing para empresa de servicios", "Presenta la oferta, explica beneficios y lleva al usuario a WhatsApp o formulario."],
+  ["Web completa para hotel o restaurante", "Ordena menus, habitaciones, reservas, ubicacion, fotos y datos de contacto."],
+  ["Sistema interno para gestionar solicitudes", "Centraliza pedidos, reservas, incidencias o formularios en un panel privado."],
+  ["Panel para organizar leads/clientes", "Permite ver contactos, estado, prioridad y proximo paso comercial."],
+];
+
+const guarantees = [
+  "Consulta inicial gratis",
+  "Ves una propuesta antes de pagar",
+  "Precios claros desde el inicio",
+  "Diseno responsive",
+  "Pensado para conversion",
+  "Escalable si luego necesitas automatizacion",
+];
+
+const faqs = [
+  [
+    "De verdad no pago si no me gusta?",
+    "Para webs simples, la consulta y propuesta/demo inicial no tiene coste. Si la idea te convence, pagas y seguimos hasta dejarla lista para publicar.",
+  ],
+  [
+    "Que incluye la landing de USD 100?",
+    "Una pagina tipo landing, diseno responsive, seccion de oferta/servicios, CTA de contacto, formulario basico y propuesta inicial gratis.",
+  ],
+  [
+    "Que diferencia hay entre la web de USD 100 y la de USD 200?",
+    "La de USD 100 es una pagina simple. La de USD 200 permite una estructura mas completa: varias secciones o paginas, menus, servicios, sobre nosotros, contacto y base SEO inicial.",
+  ],
+  [
+    "Cuando cuesta USD 500 o mas?",
+    "Cuando necesitas una webapp o sistema: panel interno, gestion de clientes, dashboards, reservas, pedidos, inventario simple o automatizaciones.",
+  ],
+  [
+    "Necesito tener textos o imagenes listas?",
+    "No necesariamente. Si ya los tienes, ayuda. Si no, podemos ayudarte a ordenar el mensaje y definir que contenido necesita la primera version.",
+  ],
+  [
+    "Pueden mejorar mi web actual?",
+    "Si. Puedes enviar tu web actual en el formulario y te diremos si conviene mejorarla, rehacerla o crear algo nuevo.",
+  ],
+  [
+    "Cuanto tarda la propuesta inicial?",
+    "Depende de la complejidad y claridad del formulario. Tras revisar tu solicitud te indicamos alcance, siguiente paso y tiempos realistas.",
+  ],
+  [
+    "Trabajan con cualquier sector?",
+    "Si. No importa el sector: si puedes explicar tu negocio, podemos convertirlo en una web o sistema util.",
+  ],
+];
+
+function SectionHeading({
+  kicker,
+  title,
+  body,
+}: {
+  kicker: string;
+  title: string;
+  body?: string;
+}) {
+  return (
+    <div className="mx-auto mb-12 max-w-3xl text-center">
+      <p className="text-sm font-black uppercase tracking-[0.18em] text-cyan-500">{kicker}</p>
+      <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950 md:text-5xl">{title}</h2>
+      {body ? <p className="mt-4 text-lg text-slate-600">{body}</p> : null}
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <main id="inicio" className="bg-pearl">
+    <main id="inicio" className="bg-[#f7fafc] text-slate-950">
       <SiteHeader />
 
-      <section className="relative isolate overflow-hidden bg-ink text-white">
-        <Image
-          src="/assets/mvog-hero.png"
-          alt="Sistema comercial automatizado MVOG"
-          fill
-          priority
-          className="absolute inset-0 -z-20 object-cover opacity-[0.42]"
-        />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-ink via-ink/86 to-navy/50" />
-        <div className="mx-auto grid min-h-[88vh] max-w-7xl items-end px-5 pb-16 pt-28 lg:px-8">
-          <div className="max-w-4xl">
-            <p className="mb-4 text-xs font-black uppercase tracking-[0.16em] text-gold">
-              MVOG SRL | Sistemas comerciales automatizados
+      <section className="relative isolate overflow-hidden bg-[#071017] px-5 py-20 text-white md:py-28 lg:px-8">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_10%,rgba(103,232,249,0.24),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.18),transparent_28%)]" />
+        <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1fr_0.9fr]">
+          <div>
+            <p className="inline-flex rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm font-black text-cyan-200">
+              Webs simples desde USD 100
             </p>
-            <h1 className="max-w-5xl text-5xl font-black tracking-tight md:text-7xl">
-              Convierte tus leads en ventas reales con un sistema comercial automatizado
+            <h1 className="mt-6 max-w-4xl text-5xl font-black leading-[0.95] tracking-tight md:text-7xl">
+              Creamos la web o sistema que tu empresa necesita. Ves la demo antes de pagar.
             </h1>
-            <p className="mt-6 max-w-3xl text-lg text-white/78 md:text-xl">
-              MVOG diseña paginas web, formularios inteligentes y flujos automatizados
-              para captar, calificar y convertir clientes sin depender de procesos manuales.
+            <p className="mt-6 max-w-2xl text-lg text-white/72 md:text-xl">
+              Cuentanos que hace tu empresa, revisamos tu caso y te enviamos una propuesta inicial.
+              Webs simples desde USD 100. Si te gusta, la pagas y te la quedas. Si no, no pagas.
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              <a className="rounded-lg bg-gold px-6 py-4 font-black text-ink transition hover:bg-white" href="#briefing">
-                Solicitar diagnostico
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a className="rounded-full bg-cyan-300 px-6 py-4 font-black text-[#071017] transition hover:-translate-y-0.5 hover:bg-white" href="#solicitar-demo">
+                Solicitar demo gratis
               </a>
-              <a className="rounded-lg border border-white/30 px-6 py-4 font-black text-white transition hover:bg-white hover:text-ink" href="#pricing">
-                Ver paquetes
+              <a className="rounded-full border border-white/20 px-6 py-4 font-black text-white transition hover:bg-white hover:text-[#071017]" href="#precios">
+                Ver precios
               </a>
+            </div>
+            <p className="mt-6 text-sm font-semibold text-white/58">
+              Consulta y demo inicial sin coste para webs simples.
+            </p>
+          </div>
+
+          <div className="relative">
+            <div className="rounded-[2rem] border border-white/10 bg-white/10 p-4 shadow-2xl shadow-cyan-950/30 backdrop-blur">
+              <div className="rounded-[1.5rem] bg-slate-950 p-5">
+                <div className="mb-5 flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-bold text-cyan-300">MVOG Studio</p>
+                    <h2 className="text-2xl font-black">Propuesta visual</h2>
+                  </div>
+                  <span className="rounded-full bg-emerald-300 px-3 py-1 text-xs font-black text-emerald-950">
+                    Demo gratis
+                  </span>
+                </div>
+                <div className="grid gap-3">
+                  {["Landing USD 100", "Web completa USD 200", "Webapp desde USD 500"].map((item) => (
+                    <div key={item} className="rounded-2xl border border-white/10 bg-white p-4 text-slate-950">
+                      <p className="font-black">{item}</p>
+                      <div className="mt-3 h-2 rounded-full bg-slate-100">
+                        <div className="h-2 w-2/3 rounded-full bg-cyan-400" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="oferta" className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
-        <SectionHeading
-          eyebrow="Oferta principal"
-          title="Sistema Comercial Automatizado MVOG"
-          body="Un MVP comercial para captar, calificar, documentar y dar seguimiento a oportunidades reales desde una sola experiencia."
-        />
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {offerItems.map((item, index) => (
-            <article key={item} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-              <span className="mb-8 grid h-10 w-10 place-items-center rounded-lg bg-navy text-sm font-black text-white">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <h3 className="font-black text-ink">{item}</h3>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-white px-5 py-20 lg:px-8">
+      <section className="px-5 py-20 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
-            eyebrow="Comparativa"
-            title="MVOG vs DIY vs Agencia tradicional"
-            body="El valor no esta solo en publicar una pagina: esta en convertir cada lead en informacion accionable."
+            kicker="Problema y solucion"
+            title="Tu empresa necesita verse profesional sin perder semanas ni gastar miles."
           />
-          <div className="overflow-x-auto rounded-lg border border-slate-200">
-            <div className="min-w-[820px]">
-              <div className="grid grid-cols-4 bg-ink text-sm font-black text-white">
-                <span className="p-4">Factor</span>
-                <span className="p-4">DIY</span>
-                <span className="p-4">Agencia tradicional</span>
-                <span className="p-4 text-gold">MVOG</span>
-              </div>
-              {comparisonRows.map((row) => (
-                <div key={row[0]} className="grid grid-cols-4 border-t border-slate-200 text-sm">
-                  {row.map((cell, index) => (
-                    <span key={cell} className={`p-4 ${index === 0 ? "font-black text-ink" : "text-steel"} ${index === 3 ? "font-bold text-navy" : ""}`}>
-                      {cell}
-                    </span>
-                  ))}
+          <div className="grid gap-5 lg:grid-cols-2">
+            <div className="grid gap-4">
+              {[
+                "No tienes web o tu web actual no vende",
+                "Tienes procesos manuales que consumen tiempo",
+                "No sabes que solucion digital necesitas",
+              ].map((problem) => (
+                <div key={problem} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <p className="font-black text-slate-950">{problem}</p>
                 </div>
               ))}
             </div>
+            <div className="rounded-[2rem] bg-slate-950 p-8 text-white">
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-cyan-300">Solucion MVOG</p>
+              <h3 className="mt-3 text-3xl font-black">Pocos datos, propuesta clara, decision despues de verla.</h3>
+              <div className="mt-6 grid gap-3 text-white/76">
+                <p>Te pedimos pocos datos.</p>
+                <p>Disenamos una propuesta/demo.</p>
+                <p>Decides despues de verla.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="plantillas" className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
-        <SectionHeading
-          eyebrow="Plantillas por nicho"
-          title="Estructuras comerciales listas para adaptar"
-          body="Cada nicho necesita preguntas, mensajes, filtros y proximos pasos distintos."
-        />
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {nicheCards.map((card) => (
-            <article key={card.title} className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-              <h3 className="text-xl font-black text-ink">{card.title}</h3>
-              <p className="mt-4 text-steel">{card.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="pricing" className="bg-ink px-5 py-20 text-white lg:px-8">
+      <section id="servicios" className="bg-white px-5 py-20 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-10 max-w-3xl">
-            <p className="mb-3 text-xs font-black uppercase tracking-[0.14em] text-gold">
-              Pricing por paquete
-            </p>
-            <h2 className="text-3xl font-black tracking-tight text-white md:text-5xl">
-              Paquetes claros para avanzar sin friccion
-            </h2>
-            <p className="mt-4 text-lg text-white/70">
-              Desde validacion comercial hasta flujos completos con documentos,
-              dashboard y seguimiento.
-            </p>
+          <SectionHeading
+            kicker="Que podemos crear"
+            title="Desde una landing simple hasta un sistema interno."
+            body="Para empresas que necesitan presencia digital sin complicarse, y tambien para quienes ya necesitan automatizar procesos."
+          />
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {services.map(([title, body]) => (
+              <article key={title} className="rounded-3xl border border-slate-200 bg-slate-50 p-6 transition hover:-translate-y-1 hover:bg-white hover:shadow-xl">
+                <h3 className="font-black">{title}</h3>
+                <p className="mt-3 text-sm text-slate-600">{body}</p>
+              </article>
+            ))}
           </div>
-          <div className="grid gap-5 lg:grid-cols-3">
-            {packages.map((pack) => (
+        </div>
+      </section>
+
+      <section id="precios" className="px-5 py-20 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeading
+            kicker="Precios"
+            title="Elige el punto de partida. Ves la demo antes de pagar."
+            body="La demo/propuesta inicial es gratis para webs simples. Solo pagas si decides quedarte con el resultado."
+          />
+          <div className="grid gap-6 lg:grid-cols-3">
+            {pricing.map((plan) => (
               <article
-                key={pack.name}
-                className={`rounded-lg border p-7 ${pack.featured ? "border-gold bg-white text-ink shadow-premium" : "border-white/10 bg-white/5 text-white"}`}
+                key={plan.name}
+                className={`rounded-[2rem] border p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-2xl ${
+                  plan.featured
+                    ? "border-cyan-300 bg-slate-950 text-white"
+                    : "border-slate-200 bg-white text-slate-950"
+                }`}
               >
-                <p className="text-sm font-black uppercase tracking-[0.14em] text-gold">{pack.name}</p>
-                <h3 className="mt-4 text-3xl font-black">{pack.price}</h3>
-                <ul className="mt-6 space-y-3">
-                  {pack.features.map((feature) => (
-                    <li key={feature} className="flex gap-3 text-sm">
-                      <span className="mt-2 h-2 w-2 rounded-full bg-gold" />
+                <p className={`inline-flex rounded-full px-3 py-1 text-xs font-black ${plan.featured ? "bg-cyan-300 text-slate-950" : "bg-cyan-100 text-cyan-900"}`}>
+                  {plan.badge}
+                </p>
+                <h3 className="mt-5 text-2xl font-black">{plan.name}</h3>
+                <p className="mt-2 text-4xl font-black">{plan.price}</p>
+                <p className={`mt-4 text-sm ${plan.featured ? "text-white/70" : "text-slate-600"}`}>{plan.body}</p>
+                <ul className="mt-6 space-y-3 text-sm">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex gap-3">
+                      <span className="mt-2 h-2 w-2 rounded-full bg-cyan-300" />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <a className="mt-8 inline-flex w-full justify-center rounded-lg bg-gold px-5 py-3 font-black text-ink transition hover:bg-white" href="#briefing">
-                  Solicitar {pack.name}
+                <a className={`mt-8 inline-flex w-full justify-center rounded-full px-5 py-3 font-black transition ${plan.featured ? "bg-cyan-300 text-slate-950 hover:bg-white" : "bg-slate-950 text-white hover:bg-cyan-500"}`} href="#solicitar-demo">
+                  Solicitar propuesta
                 </a>
               </article>
             ))}
@@ -227,20 +302,99 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="briefing" className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
-        <LeadBriefingForm />
+      <section id="como-funciona" className="bg-slate-950 px-5 py-20 text-white lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="mx-auto mb-12 max-w-3xl text-center">
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-cyan-300">Como funciona</p>
+            <h2 className="mt-3 text-3xl font-black tracking-tight md:text-5xl">Un funnel simple, sin riesgo inicial.</h2>
+            <p className="mt-4 text-lg text-white/64">Ves una propuesta/demo antes de pagar. Si te gusta, avanzamos.</p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-4">
+            {steps.map(([title, body], index) => (
+              <article key={title} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+                <span className="grid h-10 w-10 place-items-center rounded-full bg-cyan-300 font-black text-slate-950">{index + 1}</span>
+                <h3 className="mt-5 font-black">{title}</h3>
+                <p className="mt-3 text-sm text-white/64">{body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-20 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeading
+            kicker="Sectores"
+            title="Para empresas de cualquier sector"
+            body="No importa el sector: si puedes explicar tu negocio, podemos convertirlo en una web o sistema util."
+          />
+          <div className="flex flex-wrap justify-center gap-3">
+            {sectors.map((sector) => (
+              <span key={sector} className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700">
+                {sector}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="ejemplos" className="bg-white px-5 py-20 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeading kicker="Ejemplos conceptuales" title="Ideas de lo que podemos resolver" />
+          <div className="grid gap-5 md:grid-cols-2">
+            {examples.map(([title, body]) => (
+              <article key={title} className="rounded-[2rem] border border-slate-200 bg-slate-50 p-7">
+                <h3 className="text-xl font-black">{title}</h3>
+                <p className="mt-3 text-slate-600">{body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-20 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeading kicker="Garantias" title="Claro desde el inicio" />
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {guarantees.map((item) => (
+              <article key={item} className="rounded-3xl border border-slate-200 bg-white p-6 font-black shadow-sm">
+                {item}
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white px-5 py-20 lg:px-8">
+        <div className="mx-auto max-w-4xl">
+          <SectionHeading kicker="FAQ" title="Preguntas frecuentes" />
+          <div className="grid gap-4">
+            {faqs.map(([question, answer]) => (
+              <details key={question} className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+                <summary className="cursor-pointer text-lg font-black text-slate-950">{question}</summary>
+                <p className="mt-3 text-slate-600">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="solicitar-demo" className="px-5 py-20 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <LeadBriefingForm />
+        </div>
       </section>
 
       <footer className="border-t border-slate-200 bg-white px-5 py-10 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 md:flex-row md:items-center">
           <div>
-            <strong className="text-lg text-ink">MVOG SRL</strong>
-            <p className="mt-1 text-sm text-steel">
-              Sistemas comerciales automatizados para captacion, gestion y cierre de leads.
+            <strong className="text-lg text-slate-950">MVOG SRL</strong>
+            <p className="mt-1 text-sm text-slate-600">
+              Paginas web, webapps y sistemas de gestion a demanda para empresas.
             </p>
           </div>
-          <a href="/admin" className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-bold text-ink hover:border-gold">
-            Ver dashboard admin
+          <a href="#solicitar-demo" className="rounded-full bg-slate-950 px-5 py-3 text-sm font-black text-white hover:bg-cyan-500">
+            Quiero mi propuesta
           </a>
         </div>
       </footer>

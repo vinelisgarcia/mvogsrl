@@ -1,328 +1,266 @@
 "use client";
 
-import type { FormEvent, ReactNode } from "react";
+import type { FormEvent } from "react";
 import { useMemo, useState } from "react";
-import type { BudgetRange, LeadPayload, Urgency } from "@/lib/types";
 
-const initialForm: LeadPayload = {
-  fullName: "",
+type DemoForm = {
+  company: string;
+  contact: string;
+  email: string;
+  whatsapp: string;
+  country: string;
+  sector: string;
+  website: string;
+  service: string;
+  description: string;
+  consent: boolean;
+};
+
+const initialForm: DemoForm = {
   company: "",
-  role: "",
+  contact: "",
   email: "",
   whatsapp: "",
   country: "",
-  city: "",
-  industry: "",
-  idealClient: "",
-  averageTicket: "",
-  mainProducts: "",
-  currentWebsite: "",
-  socialNetworks: "",
-  currentLeadCapture: "",
-  monthlyLeads: "",
-  followUpProcess: "",
-  usesCrm: "",
-  commercialProblem: "",
-  lostSalesPoint: "",
-  objectives: [],
-  otherObjective: "",
-  budget: "",
-  urgency: "",
+  sector: "",
+  website: "",
+  service: "",
+  description: "",
   consent: false,
 };
 
-const objectiveOptions = [
-  "Quiere mas leads",
-  "Quiere mas cierres",
-  "Quiere automatizar seguimiento",
-  "Quiere mejorar imagen comercial",
-  "Quiere organizar su equipo de ventas",
-  "Quiere cumplimiento/KYC",
+const serviceOptions = [
+  "Landing simple USD 100",
+  "Web completa USD 200",
+  "Webapp/sistema de gestion",
+  "No estoy seguro",
 ];
 
-type SubmitResult = {
-  id: string;
-  recommendedPackage: string;
-  documentUrl: string;
-};
+function isValidEmail(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function buildSummary(form: DemoForm) {
+  return [
+    "Nueva solicitud de demo MVOG SRL",
+    "",
+    `Empresa: ${form.company}`,
+    `Contacto: ${form.contact || "No indicado"}`,
+    `Email: ${form.email}`,
+    `WhatsApp: ${form.whatsapp || "No indicado"}`,
+    `Pais: ${form.country || "No indicado"}`,
+    `Sector: ${form.sector}`,
+    `Web actual: ${form.website || "No tiene / no indicada"}`,
+    `Necesita: ${form.service}`,
+    "",
+    "Descripcion:",
+    form.description,
+  ].join("\n");
+}
 
 export function LeadBriefingForm() {
-  const [form, setForm] = useState<LeadPayload>(initialForm);
-  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState(initialForm);
+  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
-  const [result, setResult] = useState<SubmitResult | null>(null);
 
-  const canSubmit = useMemo(
-    () => form.consent && form.fullName && form.company && form.email && form.whatsapp,
-    [form],
-  );
+  const summary = useMemo(() => buildSummary(form), [form]);
+  const mailtoHref = `mailto:info@mvogsrl.com?subject=${encodeURIComponent(
+    `Solicitud de demo - ${form.company || "MVOG"}`,
+  )}&body=${encodeURIComponent(summary)}`;
+  const whatsappHref = `https://wa.me/?text=${encodeURIComponent(summary)}`;
 
-  function updateField<K extends keyof LeadPayload>(key: K, value: LeadPayload[K]) {
+  function updateField<K extends keyof DemoForm>(key: K, value: DemoForm[K]) {
     setForm((current) => ({ ...current, [key]: value }));
   }
 
-  function toggleObjective(objective: string) {
-    setForm((current) => {
-      const exists = current.objectives.includes(objective);
-      return {
-        ...current,
-        objectives: exists
-          ? current.objectives.filter((item) => item !== objective)
-          : [...current.objectives, objective],
-      };
-    });
+  function validate() {
+    if (!form.company.trim()) return "Indica el nombre de la empresa.";
+    if (!isValidEmail(form.email)) return "Indica un email valido.";
+    if (!form.sector.trim()) return "Indica el sector o nicho.";
+    if (!form.service) return "Selecciona que necesitas.";
+    if (form.description.trim().length < 20) {
+      return "Describe tu empresa y objetivo con al menos 20 caracteres.";
+    }
+    if (!form.consent) return "Debes aceptar el uso de la informacion para preparar la propuesta.";
+    return "";
   }
 
-  async function submitLead(event: FormEvent<HTMLFormElement>) {
+  function submitForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setLoading(true);
-    setError("");
-    setResult(null);
+    const validationError = validate();
+    setError(validationError);
 
-    try {
-      const response = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "No pudimos guardar el briefing.");
-      }
-
-      setResult(data);
-      setForm(initialForm);
-    } catch (submitError) {
-      setError(
-        submitError instanceof Error
-          ? submitError.message
-          : "No pudimos guardar el briefing.",
-      );
-    } finally {
-      setLoading(false);
-    }
+    if (validationError) return;
+    setSubmitted(true);
   }
 
   const inputClass =
-    "mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-sm text-ink outline-none transition focus:border-gold focus:ring-4 focus:ring-gold/20";
-  const labelClass = "text-sm font-bold text-coal";
+    "mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-200/70";
+  const labelClass = "text-sm font-bold text-slate-800";
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-      <div className="rounded-lg bg-ink p-8 text-white shadow-premium">
-        <p className="mb-3 text-xs font-black uppercase tracking-[0.14em] text-gold">
-          Briefing inteligente
+    <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="rounded-[2rem] bg-slate-950 p-8 text-white shadow-2xl shadow-slate-950/20 lg:p-10">
+        <p className="text-sm font-black uppercase tracking-[0.18em] text-cyan-300">
+          Demo/propuesta gratis
         </p>
-        <h2 className="text-3xl font-black tracking-tight md:text-4xl">
-          Captura informacion lista para analisis, seguimiento y propuesta.
+        <h2 className="mt-4 text-3xl font-black tracking-tight md:text-5xl">
+          Solicita tu demo/propuesta gratis
         </h2>
-        <p className="mt-5 text-white/72">
-          El formulario guarda el lead en Supabase, recomienda paquete y genera una
-          ficha HTML descargable para uso interno MVOG.
+        <p className="mt-5 text-lg text-white/72">
+          Dinos que hace tu empresa. Te devolvemos una propuesta visual. Ves la
+          idea antes de pagar.
         </p>
-        <div className="mt-8 grid gap-4 text-sm text-white/80">
-          <span className="rounded-lg border border-white/10 p-4">
-            Validacion de campos requeridos y consentimiento explicito.
-          </span>
-          <span className="rounded-lg border border-white/10 p-4">
-            Preparado para integraciones futuras con email, WhatsApp, Sheets,
-            Notion o CRM.
-          </span>
+        <div className="mt-8 grid gap-3 text-sm font-semibold text-white/82">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            Webs simples desde <strong className="text-cyan-300">USD 100</strong>.
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            Si te gusta, pagas y publicamos. Si no, no pagas.
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            Si necesitas algo mas que una web, tambien hacemos webapps y sistemas internos.
+          </div>
         </div>
       </div>
 
-      <form onSubmit={submitLead} className="rounded-lg bg-white p-6 shadow-premium md:p-8">
-        <FormGroup title="Datos del lead">
+      <form
+        onSubmit={submitForm}
+        className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-950/10 md:p-8"
+      >
+        <div className="grid gap-4 md:grid-cols-2">
           <label className={labelClass}>
-            Nombre completo
-            <input className={inputClass} required value={form.fullName} onChange={(e) => updateField("fullName", e.target.value)} />
+            Nombre de empresa
+            <input
+              className={inputClass}
+              value={form.company}
+              onChange={(event) => updateField("company", event.target.value)}
+              required
+            />
           </label>
           <label className={labelClass}>
-            Empresa
-            <input className={inputClass} required value={form.company} onChange={(e) => updateField("company", e.target.value)} />
-          </label>
-          <label className={labelClass}>
-            Cargo
-            <input className={inputClass} value={form.role} onChange={(e) => updateField("role", e.target.value)} />
+            Persona de contacto
+            <input
+              className={inputClass}
+              value={form.contact}
+              onChange={(event) => updateField("contact", event.target.value)}
+            />
           </label>
           <label className={labelClass}>
             Email
-            <input className={inputClass} type="email" required value={form.email} onChange={(e) => updateField("email", e.target.value)} />
+            <input
+              className={inputClass}
+              type="email"
+              value={form.email}
+              onChange={(event) => updateField("email", event.target.value)}
+              required
+            />
           </label>
           <label className={labelClass}>
-            WhatsApp
-            <input className={inputClass} required value={form.whatsapp} onChange={(e) => updateField("whatsapp", e.target.value)} />
+            WhatsApp opcional
+            <input
+              className={inputClass}
+              value={form.whatsapp}
+              onChange={(event) => updateField("whatsapp", event.target.value)}
+              placeholder="+1 809..."
+            />
           </label>
           <label className={labelClass}>
             Pais
-            <input className={inputClass} required value={form.country} onChange={(e) => updateField("country", e.target.value)} />
+            <input
+              className={inputClass}
+              value={form.country}
+              onChange={(event) => updateField("country", event.target.value)}
+            />
           </label>
           <label className={labelClass}>
-            Ciudad
-            <input className={inputClass} required value={form.city} onChange={(e) => updateField("city", e.target.value)} />
-          </label>
-        </FormGroup>
-
-        <FormGroup title="Informacion del negocio">
-          <label className={labelClass}>
-            Sector o industria
-            <input className={inputClass} required value={form.industry} onChange={(e) => updateField("industry", e.target.value)} />
-          </label>
-          <label className={labelClass}>
-            Tipo de cliente ideal
-            <input className={inputClass} required value={form.idealClient} onChange={(e) => updateField("idealClient", e.target.value)} />
-          </label>
-          <label className={labelClass}>
-            Ticket promedio
-            <input className={inputClass} value={form.averageTicket} onChange={(e) => updateField("averageTicket", e.target.value)} />
+            Sector/nicho
+            <input
+              className={inputClass}
+              value={form.sector}
+              onChange={(event) => updateField("sector", event.target.value)}
+              required
+            />
           </label>
           <label className={`${labelClass} md:col-span-2`}>
-            Servicios/productos principales
-            <textarea className={inputClass} required rows={3} value={form.mainProducts} onChange={(e) => updateField("mainProducts", e.target.value)} />
+            Web actual, si tiene
+            <input
+              className={inputClass}
+              value={form.website}
+              onChange={(event) => updateField("website", event.target.value)}
+              placeholder="https://..."
+            />
           </label>
-          <label className={labelClass}>
-            Pagina web actual
-            <input className={inputClass} value={form.currentWebsite} onChange={(e) => updateField("currentWebsite", e.target.value)} />
-          </label>
-          <label className={labelClass}>
-            Redes sociales
-            <input className={inputClass} value={form.socialNetworks} onChange={(e) => updateField("socialNetworks", e.target.value)} />
-          </label>
-        </FormGroup>
-
-        <FormGroup title="Situacion actual">
           <label className={`${labelClass} md:col-span-2`}>
-            Como capta leads actualmente
-            <textarea className={inputClass} required rows={3} value={form.currentLeadCapture} onChange={(e) => updateField("currentLeadCapture", e.target.value)} />
-          </label>
-          <label className={labelClass}>
-            Cuantos leads recibe al mes
-            <input className={inputClass} value={form.monthlyLeads} onChange={(e) => updateField("monthlyLeads", e.target.value)} />
-          </label>
-          <label className={labelClass}>
-            Usa CRM
-            <select className={inputClass} required value={form.usesCrm} onChange={(e) => updateField("usesCrm", e.target.value as "si" | "no")}>
-              <option value="">Selecciona</option>
-              <option value="si">Si</option>
-              <option value="no">No</option>
+            Que necesitas
+            <select
+              className={inputClass}
+              value={form.service}
+              onChange={(event) => updateField("service", event.target.value)}
+              required
+            >
+              <option value="">Selecciona una opcion</option>
+              {serviceOptions.map((option) => (
+                <option key={option}>{option}</option>
+              ))}
             </select>
           </label>
           <label className={`${labelClass} md:col-span-2`}>
-            Como da seguimiento
-            <textarea className={inputClass} required rows={3} value={form.followUpProcess} onChange={(e) => updateField("followUpProcess", e.target.value)} />
-          </label>
-          <label className={`${labelClass} md:col-span-2`}>
-            Principal problema comercial
-            <textarea className={inputClass} required rows={3} value={form.commercialProblem} onChange={(e) => updateField("commercialProblem", e.target.value)} />
-          </label>
-          <label className={`${labelClass} md:col-span-2`}>
-            Donde siente que pierde ventas
-            <textarea className={inputClass} required rows={3} value={form.lostSalesPoint} onChange={(e) => updateField("lostSalesPoint", e.target.value)} />
-          </label>
-        </FormGroup>
-
-        <div className="mt-8">
-          <h3 className="mb-4 text-lg font-black text-ink">Objetivos</h3>
-          <div className="grid gap-3 md:grid-cols-2">
-            {objectiveOptions.map((objective) => (
-              <label key={objective} className="flex items-start gap-3 rounded-lg border border-slate-200 p-3 text-sm font-semibold text-coal">
-                <input
-                  type="checkbox"
-                  className="mt-1 h-4 w-4 accent-gold"
-                  checked={form.objectives.includes(objective)}
-                  onChange={() => toggleObjective(objective)}
-                />
-                {objective}
-              </label>
-            ))}
-          </div>
-          <label className={`${labelClass} mt-4 block`}>
-            Otro objetivo
-            <input className={inputClass} value={form.otherObjective} onChange={(e) => updateField("otherObjective", e.target.value)} />
+            Describe brevemente tu empresa y que quieres conseguir
+            <textarea
+              className={inputClass}
+              rows={5}
+              minLength={20}
+              value={form.description}
+              onChange={(event) => updateField("description", event.target.value)}
+              placeholder="Ej. Somos una clinica dental y queremos una landing para recibir solicitudes por WhatsApp..."
+              required
+            />
           </label>
         </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-2">
-          <label className={labelClass}>
-            Presupuesto
-            <select className={inputClass} required value={form.budget} onChange={(e) => updateField("budget", e.target.value as BudgetRange)}>
-              <option value="">Selecciona</option>
-              <option value="under_150">Menos de USD 150</option>
-              <option value="150_1200">USD 150-1,200</option>
-              <option value="1200_3000">USD 1,200-3,000</option>
-              <option value="over_3000">Mas de USD 3,000</option>
-            </select>
-          </label>
-          <label className={labelClass}>
-            Urgencia
-            <select className={inputClass} required value={form.urgency} onChange={(e) => updateField("urgency", e.target.value as Urgency)}>
-              <option value="">Selecciona</option>
-              <option value="immediate">Inmediato</option>
-              <option value="this_month">Este mes</option>
-              <option value="next_3_months">Proximos 3 meses</option>
-              <option value="evaluating">Solo estoy evaluando</option>
-            </select>
-          </label>
-        </div>
-
-        <label className="mt-6 flex items-start gap-3 rounded-lg bg-slate-50 p-4 text-sm font-semibold text-coal">
+        <label className="mt-5 flex items-start gap-3 rounded-2xl bg-slate-50 p-4 text-sm font-semibold text-slate-800">
           <input
             type="checkbox"
-            required
-            className="mt-1 h-4 w-4 accent-gold"
+            className="mt-1 h-4 w-4 accent-cyan-500"
             checked={form.consent}
             onChange={(event) => updateField("consent", event.target.checked)}
+            required
           />
-          Acepto que MVOG utilice esta informacion para analizar mi necesidad y
-          preparar una propuesta comercial.
+          Acepto que MVOG use esta informacion para preparar una propuesta comercial.
         </label>
 
         {error ? (
-          <p className="mt-5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
+          <p className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
             {error}
           </p>
         ) : null}
 
-        {result ? (
-          <div className="mt-5 rounded-lg border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900">
-            <h3 className="font-black">Gracias. Hemos recibido tu informacion.</h3>
+        {submitted ? (
+          <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900">
+            <h3 className="font-black">Solicitud recibida.</h3>
             <p className="mt-2">
-              El equipo MVOG revisara tu caso y preparara un diagnostico inicial.
-              Paquete recomendado: <strong>{result.recommendedPackage}</strong>.
+              Revisaremos tu empresa y prepararemos una propuesta inicial. Para
+              enviarla ahora mismo por tu canal preferido, usa uno de estos accesos:
             </p>
-            <a
-              className="mt-4 inline-flex rounded-lg bg-ink px-4 py-2 font-bold text-white"
-              href={result.documentUrl}
-            >
-              Descargar ficha del lead
-            </a>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <a className="rounded-full bg-slate-950 px-4 py-2 font-black text-white" href={mailtoHref}>
+                Enviar por email
+              </a>
+              <a className="rounded-full border border-emerald-300 bg-white px-4 py-2 font-black text-emerald-900" href={whatsappHref} target="_blank">
+                Enviar por WhatsApp
+              </a>
+            </div>
           </div>
         ) : null}
 
         <button
           type="submit"
-          disabled={loading || !canSubmit}
-          className="mt-8 w-full rounded-lg bg-gold px-5 py-4 text-base font-black text-ink transition hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-6 w-full rounded-full bg-slate-950 px-6 py-4 text-base font-black text-white transition hover:-translate-y-0.5 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-200"
         >
-          {loading ? "Guardando briefing..." : "Enviar briefing y generar ficha"}
+          Enviar solicitud
         </button>
       </form>
     </div>
-  );
-}
-
-function FormGroup({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <fieldset className="mt-8 border-t border-slate-200 pt-6 first:mt-0 first:border-t-0 first:pt-0">
-      <legend className="mb-4 text-lg font-black text-ink">{title}</legend>
-      <div className="grid gap-4 md:grid-cols-2">{children}</div>
-    </fieldset>
   );
 }
