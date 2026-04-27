@@ -65,22 +65,12 @@ Abre:
    - USD 1,200-3,000: Growth
    - Mas de USD 3,000: Pro
 4. Se genera `lead_document_html`.
-5. Se envia un correo automatico con el lead a `mvogsrl@gmail.com`.
-6. Si Supabase esta configurado, se guarda todo en `leads_mvog`.
-7. El cliente ve confirmacion.
-8. MVOG ve el lead en `/admin`, descarga ficha y cambia estado.
+5. El formulario publico envia la informacion por email a `mvogsrl@gmail.com`.
+6. Si usas el panel interno con Supabase, MVOG puede ver leads en `/admin`, descargar ficha y cambiar estado.
 
-## Configurar email automatico
+## Formulario publico
 
-El formulario envia una notificacion interna usando Resend. En Vercel agrega estas variables en Project Settings > Environment Variables:
-
-```bash
-RESEND_API_KEY=re_your_api_key
-LEAD_EMAIL_TO=mvogsrl@gmail.com
-LEAD_EMAIL_FROM=MVOG SRL <onboarding@resend.dev>
-```
-
-Para produccion, lo ideal es verificar un dominio en Resend y cambiar `LEAD_EMAIL_FROM` por un remitente propio, por ejemplo `MVOG SRL <leads@tudominio.com>`.
+El formulario principal de la landing usa FormSubmit y envia las solicitudes directamente a `mvogsrl@gmail.com`, sin configurar Supabase ni variables de entorno. En el primer envio, FormSubmit puede pedir activar el correo destino desde la bandeja de entrada de MVOG.
 
 ## Despliegue
 

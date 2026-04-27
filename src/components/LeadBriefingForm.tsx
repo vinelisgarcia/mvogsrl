@@ -1,6 +1,5 @@
 "use client";
 
-import type { FormEvent } from "react";
 import { useState } from "react";
 
 type DemoForm = {
@@ -36,79 +35,11 @@ const serviceOptions = [
   "No estoy seguro",
 ];
 
-function isValidEmail(email: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
 export function LeadBriefingForm() {
   const [form, setForm] = useState(initialForm);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [emailWarning, setEmailWarning] = useState("");
 
   function updateField<K extends keyof DemoForm>(key: K, value: DemoForm[K]) {
     setForm((current) => ({ ...current, [key]: value }));
-  }
-
-  function validate() {
-    if (!form.company.trim()) return "Indica el nombre de la empresa.";
-    if (!isValidEmail(form.email)) return "Indica un email valido.";
-    if (!form.sector.trim()) return "Indica el sector o nicho.";
-    if (!form.service) return "Selecciona que necesitas.";
-    if (form.description.trim().length < 20) {
-      return "Describe tu empresa y objetivo con al menos 20 caracteres.";
-    }
-    if (!form.consent) return "Debes aceptar el uso de la informacion para preparar la propuesta.";
-    return "";
-  }
-
-  async function submitForm(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const validationError = validate();
-    setError(validationError);
-    setEmailWarning("");
-
-    if (validationError) return;
-
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch("/api/leads", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-
-      const result = (await response.json()) as {
-        error?: string;
-        emailSent?: boolean;
-        emailWarning?: string;
-      };
-
-      if (!response.ok) {
-        throw new Error(result.error || "No pudimos enviar la solicitud.");
-      }
-
-      if (!result.emailSent && result.emailWarning) {
-        setEmailWarning(
-          "La solicitud quedo validada, pero falta configurar el envio automatico de email en el servidor.",
-        );
-      }
-
-      setSubmitted(true);
-      setForm(initialForm);
-    } catch (submitError) {
-      setError(
-        submitError instanceof Error
-          ? submitError.message
-          : "No pudimos enviar la solicitud. Intentalo nuevamente.",
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
   }
 
   const inputClass =
@@ -142,13 +73,21 @@ export function LeadBriefingForm() {
       </div>
 
       <form
-        onSubmit={submitForm}
+        action="https://formsubmit.co/mvogsrl@gmail.com"
+        method="POST"
         className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-950/10 md:p-8"
       >
+        <input type="hidden" name="_subject" value="Nuevo lead desde MVOG SRL" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value="https://mvogsrl.vercel.app/#solicitar-demo" />
+        <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" />
+
         <div className="grid gap-4 md:grid-cols-2">
           <label className={labelClass}>
             Nombre de empresa
             <input
+              name="Empresa"
               className={inputClass}
               value={form.company}
               onChange={(event) => updateField("company", event.target.value)}
@@ -158,6 +97,7 @@ export function LeadBriefingForm() {
           <label className={labelClass}>
             Persona de contacto
             <input
+              name="Persona de contacto"
               className={inputClass}
               value={form.contact}
               onChange={(event) => updateField("contact", event.target.value)}
@@ -166,6 +106,7 @@ export function LeadBriefingForm() {
           <label className={labelClass}>
             Email
             <input
+              name="Email"
               className={inputClass}
               type="email"
               value={form.email}
@@ -176,6 +117,7 @@ export function LeadBriefingForm() {
           <label className={labelClass}>
             WhatsApp opcional
             <input
+              name="WhatsApp"
               className={inputClass}
               value={form.whatsapp}
               onChange={(event) => updateField("whatsapp", event.target.value)}
@@ -185,6 +127,7 @@ export function LeadBriefingForm() {
           <label className={labelClass}>
             Pais
             <input
+              name="Pais"
               className={inputClass}
               value={form.country}
               onChange={(event) => updateField("country", event.target.value)}
@@ -193,6 +136,7 @@ export function LeadBriefingForm() {
           <label className={labelClass}>
             Sector/nicho
             <input
+              name="Sector o nicho"
               className={inputClass}
               value={form.sector}
               onChange={(event) => updateField("sector", event.target.value)}
@@ -202,6 +146,7 @@ export function LeadBriefingForm() {
           <label className={`${labelClass} md:col-span-2`}>
             Web actual, si tiene
             <input
+              name="Web actual"
               className={inputClass}
               value={form.website}
               onChange={(event) => updateField("website", event.target.value)}
@@ -211,6 +156,7 @@ export function LeadBriefingForm() {
           <label className={`${labelClass} md:col-span-2`}>
             Que necesitas
             <select
+              name="Que necesita"
               className={inputClass}
               value={form.service}
               onChange={(event) => updateField("service", event.target.value)}
@@ -225,6 +171,7 @@ export function LeadBriefingForm() {
           <label className={`${labelClass} md:col-span-2`}>
             Describe brevemente tu empresa y que quieres conseguir
             <textarea
+              name="Descripcion y objetivo"
               className={inputClass}
               rows={5}
               minLength={20}
@@ -238,6 +185,8 @@ export function LeadBriefingForm() {
 
         <label className="mt-5 flex items-start gap-3 rounded-2xl bg-slate-50 p-4 text-sm font-semibold text-slate-800">
           <input
+            name="Consentimiento"
+            value="Aceptado"
             type="checkbox"
             className="mt-1 h-4 w-4 accent-cyan-500"
             checked={form.consent}
@@ -247,29 +196,11 @@ export function LeadBriefingForm() {
           Acepto que MVOG use esta informacion para preparar una propuesta comercial.
         </label>
 
-        {error ? (
-          <p className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
-            {error}
-          </p>
-        ) : null}
-
-        {submitted ? (
-          <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900">
-            <h3 className="font-black">Solicitud recibida.</h3>
-            <p className="mt-2">
-              Revisaremos tu empresa y prepararemos una propuesta inicial. La
-              informacion fue enviada al equipo MVOG.
-            </p>
-            {emailWarning ? <p className="mt-2 font-bold">{emailWarning}</p> : null}
-          </div>
-        ) : null}
-
         <button
           type="submit"
-          disabled={isSubmitting}
           className="mt-6 w-full rounded-full bg-slate-950 px-6 py-4 text-base font-black text-white transition hover:-translate-y-0.5 hover:bg-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-200"
         >
-          {isSubmitting ? "Enviando solicitud..." : "Enviar solicitud"}
+          Enviar solicitud
         </button>
       </form>
     </div>
